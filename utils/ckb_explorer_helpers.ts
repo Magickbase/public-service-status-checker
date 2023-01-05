@@ -13,7 +13,7 @@ export const handleCKBExplorerCheck = async (endpoint: string, res: NextApiRespo
           'content-type': 'application/vnd.api+json',
           accept: 'application/vnd.api+json',
         },
-      }).then((res) => res.json())
+      }).then((r) => r.json())
 
       const block = blockListRes.data[0]?.attributes
 
