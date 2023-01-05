@@ -1,7 +1,7 @@
 import type { NextApiResponse } from 'next'
 import { isString } from './type_guard'
 
-const endpointErrMessage = `Endpoint of CKB Explorer Node is not set`
+const endpointErrMessage = `Endpoint of CKB Explorer is not set`
 
 const RESILLIENT_TIME = 900_000 // 15 min
 
