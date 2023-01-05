@@ -1,7 +1,7 @@
 import type { NextApiResponse } from 'next'
 import { isString } from './type_guard'
 
-const endpointErrMessage = `Endpoint of CKB Mainnet Node is not set`
+const endpointErrMessage = `Endpoint of CKB Node is not set`
 
 const RESILLIENT_TIME = 300_000 // 5 min
 
@@ -33,11 +33,11 @@ export const handleCKBNodeCheck = async (endpoint: string, res: NextApiResponse)
   if (isString(endpoint)) {
     try {
       const header = await fetch(endpoint, CKBFetchOption.tipHeader)
-        .then((res) => res.json())
-        .then((res) => extractHeaderInfo(res.result))
+        .then((r) => r.json())
+        .then((r) => extractHeaderInfo(r.result))
 
       const systemTime = Date.now()
-      const status = { mainnet: header, systemTime }
+      const status = { header, systemTime }
 
       if (systemTime - header.timestamp > RESILLIENT_TIME) {
         throw new Error(`Timeout: ${JSON.stringify(status)}`)
