@@ -3,7 +3,7 @@ import { isString } from './type_guard'
 
 const endpointErrMessage = `Endpoint of Godwoken Explorer is not set`
 
-const RESILLIENT_TIME = 600_000 // 10 min
+const RESILLIENT_TIME = 900_000 // 15 min
 
 export const handleGWExplorerCheck = async (endpoint: string, res: NextApiResponse) => {
   if (isString(endpoint)) {
