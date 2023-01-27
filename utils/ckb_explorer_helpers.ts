@@ -8,6 +8,9 @@ const RESILLIENT_TIME = 900_000 // 15 min
 export const handleCKBExplorerCheck = async (endpoint: string, res: NextApiResponse) => {
   if (isString(endpoint)) {
     try {
+      /**
+       * get the block list on https://explorer.nervos.org/
+       */
       const blockListRes = await fetch(endpoint + '/api/v1/blocks', {
         headers: {
           'content-type': 'application/vnd.api+json',
@@ -15,6 +18,9 @@ export const handleCKBExplorerCheck = async (endpoint: string, res: NextApiRespo
         },
       }).then((r) => r.json())
 
+      /**
+       * get the latest block in the list
+       */
       const block = blockListRes.data[0]?.attributes
 
       if (!block) {
@@ -24,6 +30,9 @@ export const handleCKBExplorerCheck = async (endpoint: string, res: NextApiRespo
       const systemTime = Date.now()
       const status = { block, systemTime }
 
+      /**
+       * throw an error if no new block is found in specific time duration
+       */
       if (systemTime - +block.timestamp > RESILLIENT_TIME) {
         throw new Error(`Timeout: ${JSON.stringify(status)}`)
       }

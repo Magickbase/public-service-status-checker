@@ -8,6 +8,9 @@ const RESILLIENT_TIME = 900_000 // 15 min
 export const handleGWExplorerCheck = async (endpoint: string, res: NextApiResponse) => {
   if (isString(endpoint)) {
     try {
+      /**
+       * get the latest block on https://www.gwscan.com
+       */
       const block = await fetch(`${endpoint}/graphql`, {
         headers: {
           accept: 'application/json',
@@ -26,6 +29,9 @@ export const handleGWExplorerCheck = async (endpoint: string, res: NextApiRespon
         throw new Error('Failed to fetch block')
       }
 
+      /**
+       * throw an error if no new block is found in specific time duration
+       */
       if (systemTime - new Date(block.timestamp).getTime() > RESILLIENT_TIME) {
         throw new Error(`Timeout: ${JSON.stringify(status)}`)
       }

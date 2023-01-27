@@ -13,6 +13,9 @@ const RESILLIENT_TIME = 600_000 // 10 min
 export default async (_req: NextApiRequest, res: NextApiResponse) => {
   if (isString(endpoint)) {
     try {
+      /**
+       * get the first entry of claims on https://faucet.nervos.org/
+       */
       const claim = await fetch(`${endpoint}/claim_events`)
         .then((r) => r.json())
         .then((r) => r.claimEvents.data[0]?.attributes)
@@ -20,6 +23,9 @@ export default async (_req: NextApiRequest, res: NextApiResponse) => {
       const systemTime = Date.now()
       const status = { claim, systemTime }
 
+      /**
+       * throw an error if the first entry suspends for more than specific time
+       */
       if (claim?.status === 'pending' && systemTime - claim.timestamp * 1000 > RESILLIENT_TIME) {
         throw new Error(`Timeout: ${JSON.stringify(status)}`)
       }

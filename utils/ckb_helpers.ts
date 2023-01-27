@@ -32,6 +32,9 @@ const extractHeaderInfo = (header: Record<'hash' | 'number' | 'timestamp', strin
 export const handleCKBNodeCheck = async (endpoint: string, res: NextApiResponse) => {
   if (isString(endpoint)) {
     try {
+      /**
+       * get the tip/latest block header from ckb node
+       */
       const header = await fetch(endpoint, CKBFetchOption.tipHeader)
         .then((r) => r.json())
         .then((r) => extractHeaderInfo(r.result))
@@ -39,6 +42,9 @@ export const handleCKBNodeCheck = async (endpoint: string, res: NextApiResponse)
       const systemTime = Date.now()
       const status = { header, systemTime }
 
+      /**
+       * throw an error if new block header is not found in specific time duration
+       */
       if (systemTime - header.timestamp > RESILLIENT_TIME) {
         throw new Error(`Timeout: ${JSON.stringify(status)}`)
       }
