@@ -11,12 +11,15 @@ export const handleCKBExplorerCheck = async (endpoint: string, res: NextApiRespo
       /**
        * get the block list on https://explorer.nervos.org/
        */
-      const blockListRes = await fetch(endpoint + '/api/v1/blocks', {
-        headers: {
-          'content-type': 'application/vnd.api+json',
-          accept: 'application/vnd.api+json',
-        },
-      }).then((r) => r.json())
+      const blockListRes = await fetch(
+        `${endpoint}/api/v1/blocks?${new URLSearchParams({ page: '1', page_size: '1' })}`,
+        {
+          headers: {
+            'content-type': 'application/vnd.api+json',
+            accept: 'application/vnd.api+json',
+          },
+        }
+      ).then((r) => r.json())
 
       /**
        * get the latest block in the list
